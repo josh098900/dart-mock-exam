@@ -3,29 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dart Mock Exam</title>
+    <title>Dart Mock Exam - Enhanced</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
         <h1>Dart Mock Exam</h1>
-        <p>Test your knowledge of Dart programming concepts.</p>
+        <p>Choose your challenge or take the full mock test!</p>
     </header>
 
-    <main id="exam-container">
-        </main>
-
-    <button id="submit-btn">Submit Answers</button>
-
-    <section id="results-container" style="display:none;">
-        <h2>Results</h2>
-        <p>Your score: <span id="score"></span></p>
-        <div id="feedback-area">
-            </div>
+    <section id="mode-selection">
+        <h2>Select Exam Mode:</h2>
+        <button id="mode-main-mock" class="mode-button">Full Mock Exam (25 Qs)</button>
+        <button id="mode-code-snippets" class="mode-button">Code Snippets Only</button>
+        <button id="mode-conceptual" class="mode-button">Conceptual Questions Only</button>
     </section>
 
+    <div id="exam-area" style="display:none;"> <div id="timer-container">
+            Time Remaining: <span id="time">--:--</span>
+        </div>
+
+        <main id="exam-container">
+            </main>
+
+        <button id="submit-btn">Submit Answers</button>
+
+        <section id="results-container" style="display:none;">
+            <h2>Results</h2>
+            <p>Your score: <span id="score"></span></p>
+            <div id="feedback-area">
+                </div>
+            <button id="restart-btn" class="mode-button">Try Another Mode</button>
+        </section>
+    </div>
+
     <footer>
-        <p>Good luck with your revision!</p>
+        <p>Happy Revising! Current Date: <span id="current-date"></span></p>
     </footer>
 
     <script src="script.js"></script>

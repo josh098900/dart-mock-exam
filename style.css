@@ -1,142 +1,323 @@
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
+/* --- Global Resets & Base Styles --- */
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
 }
 
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.7;
+    background-color: #f0f2f5; /* Softer background */
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-size: 16px; /* Base font size for responsiveness */
+}
+
+/* --- Header --- */
 header {
-    background-color: #007396; /* Dart blue-ish */
+    background: linear-gradient(135deg, #007396, #005f73); /* Dart-like gradient */
     color: #fff;
-    padding: 1rem 0;
+    padding: 1.5rem 1rem;
     text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 header h1 {
-    margin: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1.8em; /* Responsive font size */
 }
 
-main#exam-container {
-    width: 80%;
-    margin: 20px auto;
-    padding: 20px;
+/* --- Mode Selection --- */
+#mode-selection {
+    text-align: center;
+    padding: 2rem 1rem;
     background-color: #fff;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin: 1rem auto;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+#mode-selection h2 {
+    margin-bottom: 1.5rem;
+    color: #005f73;
+}
+
+.mode-button {
+    display: block;
+    width: 100%;
+    padding: 0.8rem 1rem;
+    margin-bottom: 1rem;
+    background-color: #008cba;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+    text-align: center;
+}
+
+.mode-button:hover, .mode-button:focus {
+    background-color: #007396;
+    outline: none;
+    transform: translateY(-2px);
+}
+.mode-button:last-child {
+    margin-bottom: 0;
+}
+
+
+/* --- Exam Area --- */
+#exam-area {
+    width: 90%;
+    max-width: 800px; /* Max width for larger screens */
+    margin: 1rem auto;
+    padding: 1.5rem;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     border-radius: 8px;
 }
 
-.question-card {
-    margin-bottom: 30px;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+#timer-container {
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #d9534f; /* Reddish for timer */
+    margin-bottom: 1.5rem;
+    padding: 0.5rem;
     background-color: #f9f9f9;
+    border-radius: 4px;
+    border: 1px solid #eee;
 }
+
+/* --- Question Styling --- */
+#exam-container { /* This is the main for questions */
+    /* No specific styles needed here if #exam-area handles background */
+}
+
+.question-card {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #ffffff; /* Keep questions clean */
+    transition: box-shadow 0.2s ease-in-out;
+}
+.question-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
 
 .question-number {
     font-weight: bold;
     color: #007396;
-    margin-bottom: 10px;
+    margin-bottom: 0.8rem;
+    font-size: 0.9em;
 }
 
 .question-text {
     font-size: 1.1em;
-    margin-bottom: 15px;
+    margin-bottom: 1rem;
+    color: #333;
 }
 
 .code-block {
     background-color: #282c34; /* Dark theme for code */
-    color: #abb2bf;           /* Light grey text for code */
-    padding: 15px;
+    color: #abb2bf;
+    padding: 1rem;
     border-radius: 5px;
-    overflow-x: auto;         /* Handle long lines of code */
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 0.9em;
-    margin-bottom: 15px;
+    overflow-x: auto;
+    font-family: 'Consolas', 'Monaco', 'Courier New', Courier, monospace;
+    font-size: 0.95em; /* Slightly larger for readability */
+    margin-bottom: 1rem;
+    white-space: pre-wrap; /* Wrap long lines within the pre block */
+    word-break: break-all; /* Break long words if necessary */
 }
 
 .options-container label {
-    display: block;
-    margin-bottom: 10px;
+    display: block; /* Makes the whole area clickable */
+    margin-bottom: 0.8rem;
     cursor: pointer;
-    padding: 8px;
-    border-radius: 4px;
-    transition: background-color 0.2s;
+    padding: 0.8rem;
+    border-radius: 6px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    transition: background-color 0.2s, border-color 0.2s;
 }
 
 .options-container label:hover {
-    background-color: #e0f7fa;
+    background-color: #e9ecef;
+    border-color: #ced4da;
 }
 
 .options-container input[type="radio"],
 .options-container input[type="checkbox"] {
-    margin-right: 10px;
+    margin-right: 0.8rem;
+    vertical-align: middle; /* Align checkboxes/radios better with text */
 }
 
+/* --- Submit Button --- */
 #submit-btn {
     display: block;
-    width: 200px;
-    margin: 30px auto;
-    padding: 12px 20px;
-    background-color: #008cba; /* A slightly different blue */
+    width: 100%; /* Full width on mobile */
+    max-width: 250px; /* Max width on larger screens */
+    margin: 2rem auto 0;
+    padding: 0.8rem 1.2rem;
+    background-color: #28a745; /* Green for submit */
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     font-size: 1.1em;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease;
 }
 
-#submit-btn:hover {
-    background-color: #005f73;
+#submit-btn:hover, #submit-btn:focus {
+    background-color: #218838; /* Darker green */
+    transform: translateY(-2px);
+    outline: none;
+}
+#submit-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: none;
 }
 
+/* --- Results & Feedback --- */
 #results-container {
-    width: 80%;
-    margin: 30px auto;
-    padding: 20px;
-    background-color: #e6ffed; /* Light green for results */
-    border: 1px solid #b2dfdb;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: #e6f7ff; /* Light blue for results */
+    border: 1px solid #b3e0ff;
     border-radius: 8px;
 }
 
 #results-container h2 {
     text-align: center;
-    color: #004d40;
+    color: #005f73;
+    margin-bottom: 1rem;
+}
+
+#results-container #score {
+    font-weight: bold;
+    font-size: 1.2em;
 }
 
 .feedback-item {
-    margin-bottom: 15px;
-    padding-bottom: 15px;
-    border-bottom: 1px dashed #ccc;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px dashed #cce0ff;
 }
 .feedback-item:last-child {
     border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
-
-.explanation {
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #eef;
-    border-left: 3px solid #007396;
-    font-size: 0.9em;
+.feedback-status {
+    font-weight: bold;
+    margin-top: 0.5rem;
 }
-
-/* Styling for correct/incorrect visual feedback on question cards */
-.question-card.correct {
-    border-left: 5px solid green;
-}
-.question-card.incorrect {
-    border-left: 5px solid red;
-}
+.correct-feedback { color: #28a745; }
+.incorrect-feedback { color: #dc3545; }
+.unanswered-feedback { color: #ffc107; } /* Yellow for unanswered */
 
 
+.explanation { /* This is the wrapper for explanation text inside question card (initially hidden) */
+    margin-top: 1rem;
+    padding: 0.8rem;
+    background-color: #f0f8ff; /* Alice blue for explanations */
+    border-left: 4px solid #007396;
+    font-size: 0.95em;
+    border-radius: 0 4px 4px 0;
+}
+.explanation p { margin: 0; } /* Remove default p margin inside explanation */
+
+.explanation-text { /* This is the explanation text within the feedback item in results */
+    margin-top: 0.5rem;
+    padding: 0.8rem;
+    background-color: #f0f8ff;
+    border-left: 4px solid #007396;
+    font-size: 0.95em;
+    border-radius: 0 4px 4px 0;
+}
+.explanation-text em { font-style: normal; }
+
+
+/* Visual feedback on question cards in results */
+.question-card.correct { border-left: 5px solid #28a745; background-color: #f0fff0; }
+.question-card.incorrect { border-left: 5px solid #dc3545; background-color: #fff0f0; }
+.question-card.unanswered { border-left: 5px solid #ffc107; background-color: #fff8e1; }
+
+
+/* --- Footer --- */
 footer {
     text-align: center;
-    padding: 20px;
-    margin-top: 30px;
+    padding: 1.5rem 1rem;
+    margin-top: auto; /* Pushes footer to the bottom */
     font-size: 0.9em;
     color: #777;
+    background-color: #e9ecef; /* Light grey footer background */
+}
+
+/* --- Media Queries for Responsiveness --- */
+
+/* For tablets and larger phones */
+@media (min-width: 600px) {
+    header h1 {
+        font-size: 2.2em;
+    }
+    .mode-button {
+        display: inline-block; /* Allow buttons side-by-side if space */
+        width: auto;
+        padding: 0.8rem 1.5rem;
+        margin: 0.5rem;
+    }
+    #mode-selection {
+        padding: 2.5rem;
+    }
+    .question-text {
+        font-size: 1.15em;
+    }
+    .code-block {
+        font-size: 1em;
+    }
+    #submit-btn {
+        padding: 1rem 1.5rem;
+    }
+}
+
+/* For small desktops */
+@media (min-width: 768px) {
+    #exam-area, #mode-selection {
+        width: 80%;
+    }
+    .question-card {
+        padding: 1.8rem;
+    }
+}
+
+/* For larger desktops */
+@media (min-width: 992px) {
+    #exam-area, #mode-selection {
+        width: 70%;
+        max-width: 900px; /* Increased max-width slightly */
+    }
+    header h1 {
+        font-size: 2.5em;
+    }
+}
+
+/* Accessibility: Focus states for keyboard navigation */
+.mode-button:focus, #submit-btn:focus, .options-container label input:focus + span {
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Example focus ring */
+    outline: none;
+}
+.options-container label:focus-within { /* Style label when radio/checkbox inside has focus */
+    background-color: #d6eaff;
+    border-color: #007bff;
 }
