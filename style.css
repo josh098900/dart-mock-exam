@@ -1,0 +1,142 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background-color: #007396; /* Dart blue-ish */
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+}
+
+main#exam-container {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.question-card {
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.question-number {
+    font-weight: bold;
+    color: #007396;
+    margin-bottom: 10px;
+}
+
+.question-text {
+    font-size: 1.1em;
+    margin-bottom: 15px;
+}
+
+.code-block {
+    background-color: #282c34; /* Dark theme for code */
+    color: #abb2bf;           /* Light grey text for code */
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;         /* Handle long lines of code */
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+
+.options-container label {
+    display: block;
+    margin-bottom: 10px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.options-container label:hover {
+    background-color: #e0f7fa;
+}
+
+.options-container input[type="radio"],
+.options-container input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+#submit-btn {
+    display: block;
+    width: 200px;
+    margin: 30px auto;
+    padding: 12px 20px;
+    background-color: #008cba; /* A slightly different blue */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#submit-btn:hover {
+    background-color: #005f73;
+}
+
+#results-container {
+    width: 80%;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #e6ffed; /* Light green for results */
+    border: 1px solid #b2dfdb;
+    border-radius: 8px;
+}
+
+#results-container h2 {
+    text-align: center;
+    color: #004d40;
+}
+
+.feedback-item {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #ccc;
+}
+.feedback-item:last-child {
+    border-bottom: none;
+}
+
+.explanation {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #eef;
+    border-left: 3px solid #007396;
+    font-size: 0.9em;
+}
+
+/* Styling for correct/incorrect visual feedback on question cards */
+.question-card.correct {
+    border-left: 5px solid green;
+}
+.question-card.incorrect {
+    border-left: 5px solid red;
+}
+
+
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    font-size: 0.9em;
+    color: #777;
+}
