@@ -27,55 +27,59 @@ header {
 
 header h1 {
     margin-bottom: 0.5rem;
-    font-size: 1.8em; /* Responsive font size */
+    font-size: 1.8em;
 }
 
-/* --- Mode Selection --- */
-#mode-selection {
-    text-align: center;
-    padding: 2rem 1rem;
+header p {
+    font-size: 1em;
+    opacity: 0.9;
+}
+
+/* --- Exam Initiation Section (for the start button) --- */
+#exam-initiation {
+    text-align: center; /* Fallback centering */
+    padding: 3rem 1rem; /* More padding to give it space */
     background-color: #fff;
-    margin: 1rem auto;
+    margin: 2rem auto;
     width: 90%;
     max-width: 600px;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    /* Flexbox for robust centering of the button */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-#mode-selection h2 {
-    margin-bottom: 1.5rem;
-    color: #005f73;
-}
-
-.mode-button {
-    display: block;
-    width: 100%;
-    padding: 0.8rem 1rem;
-    margin-bottom: 1rem;
+.mode-button, #start-exam-btn, #restart-btn { /* Common button styling */
+    display: inline-block; /* Changed from block to allow centering if not using flex on parent */
+    padding: 0.8rem 1.5rem; /* Adjusted padding */
+    margin: 0.5rem; /* Margin for spacing if multiple buttons were present */
     background-color: #008cba;
     color: white;
     border: none;
     border-radius: 6px;
-    font-size: 1em;
+    font-size: 1.1em; /* Slightly larger font */
+    font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out, transform 0.1s ease;
     text-align: center;
+    min-width: 200px; /* Ensure button has a decent width */
 }
 
-.mode-button:hover, .mode-button:focus {
+.mode-button:hover, #start-exam-btn:hover, #restart-btn:hover,
+.mode-button:focus, #start-exam-btn:focus, #restart-btn:focus {
     background-color: #007396;
     outline: none;
     transform: translateY(-2px);
-}
-.mode-button:last-child {
-    margin-bottom: 0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Add a little shadow on hover/focus */
 }
 
 
 /* --- Exam Area --- */
 #exam-area {
     width: 90%;
-    max-width: 800px; /* Max width for larger screens */
+    max-width: 800px; 
     margin: 1rem auto;
     padding: 1.5rem;
     background-color: #fff;
@@ -87,7 +91,7 @@ header h1 {
     text-align: center;
     font-size: 1.2em;
     font-weight: bold;
-    color: #d9534f; /* Reddish for timer */
+    color: #d9534f; 
     margin-bottom: 1.5rem;
     padding: 0.5rem;
     background-color: #f9f9f9;
@@ -96,22 +100,18 @@ header h1 {
 }
 
 /* --- Question Styling --- */
-#exam-container { /* This is the main for questions */
-    /* No specific styles needed here if #exam-area handles background */
-}
-
 .question-card {
     margin-bottom: 2rem;
     padding: 1.5rem;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
-    background-color: #ffffff; /* Keep questions clean */
+    background-color: #ffffff; 
     transition: box-shadow 0.2s ease-in-out;
+    border-left: 5px solid transparent; /* Base for status borders */
 }
 .question-card:hover {
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
-
 
 .question-number {
     font-weight: bold;
@@ -127,20 +127,20 @@ header h1 {
 }
 
 .code-block {
-    background-color: #282c34; /* Dark theme for code */
+    background-color: #282c34; 
     color: #abb2bf;
     padding: 1rem;
     border-radius: 5px;
     overflow-x: auto;
     font-family: 'Consolas', 'Monaco', 'Courier New', Courier, monospace;
-    font-size: 0.95em; /* Slightly larger for readability */
+    font-size: 0.95em; 
     margin-bottom: 1rem;
-    white-space: pre-wrap; /* Wrap long lines within the pre block */
-    word-break: break-all; /* Break long words if necessary */
+    white-space: pre-wrap; 
+    word-break: break-all; 
 }
 
 .options-container label {
-    display: block; /* Makes the whole area clickable */
+    display: block; 
     margin-bottom: 0.8rem;
     cursor: pointer;
     padding: 0.8rem;
@@ -158,127 +158,212 @@ header h1 {
 .options-container input[type="radio"],
 .options-container input[type="checkbox"] {
     margin-right: 0.8rem;
-    vertical-align: middle; /* Align checkboxes/radios better with text */
+    vertical-align: middle; 
 }
 
 /* --- Submit Button --- */
 #submit-btn {
     display: block;
-    width: 100%; /* Full width on mobile */
-    max-width: 250px; /* Max width on larger screens */
+    width: 100%; 
+    max-width: 250px; 
     margin: 2rem auto 0;
     padding: 0.8rem 1.2rem;
-    background-color: #28a745; /* Green for submit */
+    background-color: #28a745; 
     color: white;
     border: none;
     border-radius: 6px;
     font-size: 1.1em;
+    font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out, transform 0.1s ease;
 }
 
 #submit-btn:hover, #submit-btn:focus {
-    background-color: #218838; /* Darker green */
+    background-color: #218838; 
     transform: translateY(-2px);
     outline: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 #submit-btn:disabled {
     background-color: #ccc;
     cursor: not-allowed;
     transform: none;
+    box-shadow: none;
 }
 
 /* --- Results & Feedback --- */
 #results-container {
-    margin-top: 2rem;
-    padding: 1.5rem;
-    background-color: #e6f7ff; /* Light blue for results */
-    border: 1px solid #b3e0ff;
+    width: 90%;
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 25px; /* Increased padding */
+    background-color: #fdfdfd; /* Slightly off-white for distinction */
+    border: 1px solid #e0e0e0;
     border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
 }
 
 #results-container h2 {
     text-align: center;
-    color: #005f73;
-    margin-bottom: 1rem;
+    color: #005f73; /* Darker Dart blue */
+    margin-bottom: 25px;
+    font-size: 1.6em;
 }
 
 #results-container #score {
     font-weight: bold;
-    font-size: 1.2em;
+    font-size: 1.4em; /* Prominent score */
+    color: #007396; 
+    display: block; 
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 10px;
+    background-color: #e6f7ff;
+    border-radius: 4px;
 }
 
-.feedback-item {
-    margin-bottom: 1.5rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px dashed #cce0ff;
+/* Styling for each question's feedback block */
+.feedback-question-block {
+    padding: 20px; /* More padding */
+    margin-bottom: 25px; /* More spacing */
+    background-color: #fff; 
+    border: 1px solid #e7e7e7;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
-.feedback-item:last-child {
-    border-bottom: none;
+.feedback-question-block:last-child {
     margin-bottom: 0;
-    padding-bottom: 0;
 }
-.feedback-status {
+
+.feedback-question-block h4 { 
+    font-size: 1.2em; /* Slightly larger question text in feedback */
+    color: #333;
+    margin-bottom: 12px;
+    font-weight: 600; /* Bolder */
+}
+
+.feedback-code { 
+    background-color: #282c34;
+    color: #abb2bf;
+    padding: 12px; /* More padding */
+    border-radius: 4px;
+    margin: 12px 0;
+    font-size: 0.9em;
+    overflow-x: auto;
+}
+
+.feedback-question-block p {
+    margin-bottom: 10px; 
+    line-height: 1.65; /* Improved line height */
+}
+
+.feedback-question-block p strong { 
+    color: #444; /* Darker strong text */
+    font-weight: 600;
+}
+
+.correct-answer-text {
+    color: #28a745; /* Green */
     font-weight: bold;
-    margin-top: 0.5rem;
 }
-.correct-feedback { color: #28a745; }
-.incorrect-feedback { color: #dc3545; }
-.unanswered-feedback { color: #ffc107; } /* Yellow for unanswered */
 
+.feedback-status {
+    padding: 10px 15px; /* More padding */
+    margin-top: 8px;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    font-weight: bold;
+    border-width: 1px;
+    border-style: solid;
+}
+.feedback-status.correct-feedback { 
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+.feedback-status.partially-correct { 
+    color: #856404; /* Darker yellow/orange text */
+    background-color: #fff3cd; /* Light yellow */
+    border-color: #ffeeba;
+}
+.feedback-status.incorrect-feedback {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+.feedback-status.unanswered-feedback { 
+    color: #555;
+    background-color: #f0f0f0;
+    border-color: #ddd;
+    font-style: italic;
+}
 
-.explanation { /* This is the wrapper for explanation text inside question card (initially hidden) */
-    margin-top: 1rem;
-    padding: 0.8rem;
-    background-color: #f0f8ff; /* Alice blue for explanations */
-    border-left: 4px solid #007396;
+.incorrect-selection-note {
+    color: #721c24; /* Match incorrect feedback color */
+    font-style: italic;
+    font-weight: normal; /* Normal weight for this note */
+}
+
+.explanation-feedback {
+    margin-top: 15px; /* More space before explanation */
+    padding: 15px;
+    background-color: #f8f9fa; /* Very light grey */
+    border-left: 4px solid #007396; 
     font-size: 0.95em;
-    border-radius: 0 4px 4px 0;
+    border-radius: 0 4px 4px 0; /* Rounded corners except left */
 }
-.explanation p { margin: 0; } /* Remove default p margin inside explanation */
-
-.explanation-text { /* This is the explanation text within the feedback item in results */
-    margin-top: 0.5rem;
-    padding: 0.8rem;
-    background-color: #f0f8ff;
-    border-left: 4px solid #007396;
-    font-size: 0.95em;
-    border-radius: 0 4px 4px 0;
+.explanation-feedback p strong {
+    color: #333;
 }
-.explanation-text em { font-style: normal; }
+
+hr.feedback-divider {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0)); /* Fancier divider */
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+hr.feedback-divider:last-of-type { /* Hide last divider if it's after the last block */
+    display: none; 
+}
 
 
-/* Visual feedback on question cards in results */
-.question-card.correct { border-left: 5px solid #28a745; background-color: #f0fff0; }
-.question-card.incorrect { border-left: 5px solid #dc3545; background-color: #fff0f0; }
-.question-card.unanswered { border-left: 5px solid #ffc107; background-color: #fff8e1; }
+/* Question Card Styling (in main exam view, before results) */
+.question-card.correct {
+    border-left-color: #28a745; /* Green */
+    background-color: #f0fff0; 
+}
+.question-card.partially-correct { 
+    border-left-color: #fd7e14; /* Brighter Orange */
+    background-color: #fff3e0; 
+}
+.question-card.incorrect {
+    border-left-color: #dc3545; /* Red */
+    background-color: #fff0f0; 
+}
+.question-card.unanswered {
+    border-left-color: #ffc107; /* Yellow */
+    background-color: #fff8e1; 
+}
 
 
 /* --- Footer --- */
 footer {
     text-align: center;
     padding: 1.5rem 1rem;
-    margin-top: auto; /* Pushes footer to the bottom */
+    margin-top: auto; 
     font-size: 0.9em;
     color: #777;
-    background-color: #e9ecef; /* Light grey footer background */
+    background-color: #e9ecef; 
 }
 
 /* --- Media Queries for Responsiveness --- */
-
-/* For tablets and larger phones */
 @media (min-width: 600px) {
     header h1 {
         font-size: 2.2em;
     }
-    .mode-button {
-        display: inline-block; /* Allow buttons side-by-side if space */
-        width: auto;
-        padding: 0.8rem 1.5rem;
-        margin: 0.5rem;
-    }
-    #mode-selection {
-        padding: 2.5rem;
+    .mode-button, #start-exam-btn, #restart-btn { /* Ensure consistent responsive behavior */
+        padding: 0.9rem 1.8rem;
     }
     .question-text {
         font-size: 1.15em;
@@ -291,9 +376,8 @@ footer {
     }
 }
 
-/* For small desktops */
 @media (min-width: 768px) {
-    #exam-area, #mode-selection {
+    #exam-area, #exam-initiation, #results-container { /* Apply consistent width */
         width: 80%;
     }
     .question-card {
@@ -301,11 +385,10 @@ footer {
     }
 }
 
-/* For larger desktops */
 @media (min-width: 992px) {
-    #exam-area, #mode-selection {
+    #exam-area, #exam-initiation, #results-container {
         width: 70%;
-        max-width: 900px; /* Increased max-width slightly */
+        max-width: 900px; 
     }
     header h1 {
         font-size: 2.5em;
@@ -313,11 +396,15 @@ footer {
 }
 
 /* Accessibility: Focus states for keyboard navigation */
-.mode-button:focus, #submit-btn:focus, .options-container label input:focus + span {
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Example focus ring */
+.mode-button:focus, #start-exam-btn:focus, #restart-btn:focus,
+#submit-btn:focus, 
+.options-container label input:focus + span { /* This would need span around option text */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); 
     outline: none;
 }
-.options-container label:focus-within { /* Style label when radio/checkbox inside has focus */
+/* A better way to style focused label if input is inside */
+.options-container label:focus-within { 
     background-color: #d6eaff;
     border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.35);
 }
