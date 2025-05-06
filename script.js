@@ -157,187 +157,200 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- handleSubmit function ---
-    function handleSubmit() {
-        console.log("handleSubmit: Function started.");
-        clearInterval(timerInterval);
-        let score = 0; 
-        let detailedFeedbackHTML = '';
+    // Replace your entire handleSubmit function with this one:
+function handleSubmit() {
+    console.log("handleSubmit: Function started.");
+    clearInterval(timerInterval);
+    let score = 0;
+    let detailedFeedbackHTML = '';
 
-        currentQuestions.forEach((q, index) => {
-            console.log(`handleSubmit: Processing question ID ${q.id}, type ${q.type}`);
-            const questionCard = document.getElementById(`question-${index}`);
-            detailedFeedbackHTML += `<div class="feedback-question-block">`;
-            detailedFeedbackHTML += `<h4>Question ${index + 1}: ${escapeHTML(q.text)}</h4>`; 
+    currentQuestions.forEach((q, index) => {
+        console.log(`handleSubmit: Processing question ID ${q.id}, type ${q.type}`);
+        const questionCard = document.getElementById(`question-${index}`); // For styling original card (optional here)
+        
+        detailedFeedbackHTML += `<div class="feedback-question-block">`;
+        detailedFeedbackHTML += `<h4>Question ${index + 1}: ${escapeHTML(q.text)}</h4>`;
 
-            if (q.code) {
-                 const escapedCode = q.code ? escapeHTML(q.code) : '';
-                 detailedFeedbackHTML += `<pre class="code-block feedback-code"><code>${escapedCode}</code></pre>`;
+        if (q.code) {
+            const escapedCode = q.code ? escapeHTML(q.code) : '';
+            detailedFeedbackHTML += `<pre class="code-block feedback-code"><code>${escapedCode}</code></pre>`;
+        }
+
+        let answered = false;
+        let isQuestionCorrectOverall = false; // For MC and perfect MS
+        let ms_correctlySelectedCount = 0;
+        let ms_incorrectSelectionsMadeText = [];
+        let ms_isPerfectScore = false;
+        let ms_totalCorrectOptions = 0;
+
+        // Determine user's selections
+        let userSelectedOptionTexts = []; // For MC (will have 0 or 1 item)
+        let userSelectedOptionIds = [];   // For MS
+
+        if (q.type === 'multiple-choice' || q.type === 'code-snippet') {
+            const selectedInput = document.querySelector(`input[name="question${q.id}"]:checked`);
+            if (selectedInput) {
+                answered = true;
+                userSelectedOptionTexts.push(selectedInput.value); // value is escapeHTML(opt.text)
             }
+        } else if (q.type === 'multiple-select') {
+            const selectedCheckboxes = document.querySelectorAll(`input[name="question${q.id}"]:checked`);
+            if (selectedCheckboxes.length > 0) answered = true;
+            selectedCheckboxes.forEach(cb => {
+                userSelectedOptionIds.push(cb.dataset.optionId);
+                userSelectedOptionTexts.push(cb.value); // value is escapeHTML(opt.text)
+            });
+        }
 
-            let isQuestionCorrectOverall = false; 
-            let answered = false;
-            let userAnswerDisplayText = ''; 
-            
-            let ms_correctlySelectedCount = 0;
-            let ms_incorrectSelectionsMadeText = [];
-            let ms_isPerfectScore = false;
-            let ms_totalCorrectOptions = 0;
+        detailedFeedbackHTML += `<div class="feedback-options-summary">`; // Wrapper for options review
 
-            if (q.type === 'multiple-choice' || q.type === 'code-snippet') {
-                const selectedOptionInput = document.querySelector(`input[name="question${q.id}"]:checked`);
-                if (selectedOptionInput) {
-                    answered = true;
-                    const userAnswerValue = selectedOptionInput.value; 
-                    userAnswerDisplayText = userAnswerValue; 
+        // Display all options with feedback
+        if (q.options) {
+            q.options.forEach(opt => {
+                let optIsCorrect = false;
+                let userSelectedThisOption = false;
+                let optionClasses = "feedback-option-item";
 
-                    const correctOption = q.options.find(opt => opt.correct === true);
-                    if (correctOption) {
-                        if (userAnswerValue === escapeHTML(correctOption.text)) { 
-                            score++; 
-                            isQuestionCorrectOverall = true;
-                        }
-                    } else {
-                        console.error(`Error: No correct option defined for MC question ID ${q.id}! Ensure one option has "correct": true.`);
+                if (q.type === 'multiple-choice' || q.type === 'code-snippet') {
+                    optIsCorrect = opt.correct === true;
+                    if (answered && userSelectedOptionTexts.length > 0) {
+                        userSelectedThisOption = (escapeHTML(opt.text) === userSelectedOptionTexts[0]);
                     }
+                } else if (q.type === 'multiple-select') {
+                    optIsCorrect = (q.correctAnswers || []).includes(opt.id);
+                    userSelectedThisOption = userSelectedOptionIds.includes(opt.id);
+                }
+
+                if (optIsCorrect && userSelectedThisOption) {
+                    optionClasses += " user-selected-correct";
+                } else if (!optIsCorrect && userSelectedThisOption) {
+                    optionClasses += " user-selected-incorrect";
+                } else if (optIsCorrect && !userSelectedThisOption) {
+                    optionClasses += " missed-correct-option";
+                } else { // Not selected and not correct (or just not selected if MC)
+                    optionClasses += " option-neutral";
+                }
+                
+                detailedFeedbackHTML += `<div class="${optionClasses}">`;
+                detailedFeedbackHTML += escapeHTML(opt.text);
+                if (userSelectedThisOption && optIsCorrect) {
+                    detailedFeedbackHTML += ` <span class="feedback-icon correct-icon">✔ (Your pick & Correct)</span>`;
+                } else if (userSelectedThisOption && !optIsCorrect) {
+                    detailedFeedbackHTML += ` <span class="feedback-icon incorrect-icon">✘ (Your pick & Incorrect)</span>`;
+                } else if (optIsCorrect && !userSelectedThisOption) {
+                    detailedFeedbackHTML += ` <span class="feedback-icon correct-icon">✔ (Correct)</span>`;
+                } else if (!optIsCorrect && !userSelectedThisOption && q.type === 'multiple-select') {
+                     detailedFeedbackHTML += ` <span class="feedback-icon neutral-icon"></span>`; // Placeholder for alignment or leave empty
+                }
+                 else if (!optIsCorrect && !userSelectedThisOption && q.type === 'multiple-choice') {
+                     detailedFeedbackHTML += ` <span class="feedback-icon neutral-icon"></span>`;
+                }
+                detailedFeedbackHTML += `</div>`;
+            });
+        }
+        detailedFeedbackHTML += `</div>`; // End .feedback-options-summary
+
+        // Calculate score and status for overall question
+        if (q.type === 'multiple-choice' || q.type === 'code-snippet') {
+            const correctOption = q.options.find(opt => opt.correct === true);
+            if (answered && correctOption && userSelectedOptionTexts[0] === escapeHTML(correctOption.text)) {
+                score++;
+                isQuestionCorrectOverall = true;
+            }
+        } else if (q.type === 'multiple-select') {
+            const correctOptionIds = q.correctAnswers || [];
+            ms_totalCorrectOptions = correctOptionIds.length;
+            ms_correctlySelectedCount = 0;
+            let actualIncorrectSelectionsMade = 0;
+
+            correctOptionIds.forEach(correctId => {
+                if (userSelectedOptionIds.includes(correctId)) {
+                    ms_correctlySelectedCount++;
+                }
+            });
+            userSelectedOptionIds.forEach(selectedId => {
+                if (!correctOptionIds.includes(selectedId)) {
+                    actualIncorrectSelectionsMade++;
+                }
+            });
+
+            ms_isPerfectScore = (ms_correctlySelectedCount === ms_totalCorrectOptions && actualIncorrectSelectionsMade === 0 && ms_totalCorrectOptions > 0);
+
+            if (ms_isPerfectScore) {
+                score++;
+                isQuestionCorrectOverall = true;
+                detailedFeedbackHTML += `<p class="feedback-status correct-feedback">Perfect! All your selections were correct.</p>`;
+            } else if (ms_correctlySelectedCount > 0) {
+                isQuestionCorrectOverall = true; // User got at least one part right
+                let feedbackMsg = `<p class="feedback-status partially-correct">You correctly selected ${ms_correctlySelectedCount} of the ${ms_totalCorrectOptions} correct option(s).`;
+                if (actualIncorrectSelectionsMade > 0) {
+                    feedbackMsg += ` <span class="incorrect-selection-note">You also made ${actualIncorrectSelectionsMade} incorrect selection(s).</span>`;
+                }
+                feedbackMsg += `</p>`;
+                detailedFeedbackHTML += feedbackMsg;
+            } else if (answered) { // Answered, but no correct options were part of the selection
+                detailedFeedbackHTML += `<p class="feedback-status incorrect-feedback">None of your selected options were correct.</p>`;
+            } else { // Not answered
+                detailedFeedbackHTML += `<p class="feedback-status unanswered-feedback">You did not answer this question.</p>`;
+            }
+        }
+        
+        // Overall status for MC (if not already covered by MS block)
+        if ((q.type === 'multiple-choice' || q.type === 'code-snippet')) {
+            if (answered) {
+                if (isQuestionCorrectOverall) {
+                    detailedFeedbackHTML += `<p class="feedback-status correct-feedback">Your answer was correct!</p>`;
                 } else {
-                    userAnswerDisplayText = "No answer selected.";
+                    detailedFeedbackHTML += `<p class="feedback-status incorrect-feedback">Your answer was incorrect.</p>`;
                 }
-                detailedFeedbackHTML += `<p><strong>Your answer:</strong> ${userAnswerDisplayText}</p>`;
+            } else {
+                detailedFeedbackHTML += `<p class="feedback-status unanswered-feedback">You did not answer this question.</p>`;
+            }
+        }
 
-                const correctOptionData = q.options.find(opt => opt.correct);
-                if (correctOptionData) {
-                    detailedFeedbackHTML += `<p><strong>Correct answer:</strong> <span class="correct-answer-text">${escapeHTML(correctOptionData.text)}</span></p>`;
-                } else {
-                     detailedFeedbackHTML += `<p><strong>Correct answer:</strong> <span style="color:red;">Not defined in question data!</span></p>`;
-                }
 
-            } else if (q.type === 'multiple-select') {
-                const selectedCheckboxes = document.querySelectorAll(`input[name="question${q.id}"]:checked`);
-                let selectedIds = [];
-                let selectedEscapedTexts = [];
-                
-                if (selectedCheckboxes.length > 0) answered = true;
-
-                selectedCheckboxes.forEach(cb => {
-                    selectedIds.push(cb.dataset.optionId);
-                    selectedEscapedTexts.push(cb.value);
-                });
-
-                userAnswerDisplayText = selectedEscapedTexts.length > 0 ? selectedEscapedTexts.join(', ') : "No answer selected.";
-                detailedFeedbackHTML += `<p><strong>Your answer:</strong> ${userAnswerDisplayText}</p>`;
-
-                const correctOptionIds = q.correctAnswers || [];
-                const allOptionObjects = q.options || [];
-                ms_totalCorrectOptions = correctOptionIds.length;
-
-                if (ms_totalCorrectOptions === 0 && answered) {
-                    console.warn(`handleSubmit MS: No correctAnswers defined for question ${q.id} but it was answered.`);
-                }
-
-                correctOptionIds.forEach(correctId => {
-                    if (selectedIds.includes(correctId)) {
-                        ms_correctlySelectedCount++;
-                    }
-                });
-
-                selectedIds.forEach(selectedId => {
-                    if (!correctOptionIds.includes(selectedId)) {
-                        const incorrectOption = allOptionObjects.find(opt => opt.id === selectedId);
-                        if (incorrectOption) {
-                            ms_incorrectSelectionsMadeText.push(escapeHTML(incorrectOption.text));
-                        }
-                    }
-                });
-                
-                ms_isPerfectScore = (ms_correctlySelectedCount === ms_totalCorrectOptions && ms_incorrectSelectionsMadeText.length === 0 && ms_totalCorrectOptions > 0);
-                
-                if (ms_correctlySelectedCount > 0) {
-                    isQuestionCorrectOverall = true; 
-                }
-                
-                if (ms_isPerfectScore) {
-                    score++; 
-                }
-                
+        // Apply styling to the original question card (this part is optional as examContainer gets hidden)
+        if (questionCard) {
+            questionCard.classList.remove('correct', 'incorrect', 'unanswered', 'partially-correct');
+            if (q.type === 'multiple-select') {
                 if (answered) {
-                    if (ms_isPerfectScore) {
-                         detailedFeedbackHTML += `<p class="feedback-status correct-feedback">Perfect! All your selections were correct.</p>`;
-                    } else if (ms_correctlySelectedCount > 0) {
-                        let feedbackMsg = `<p class="feedback-status partially-correct">You correctly selected ${ms_correctlySelectedCount} of the ${ms_totalCorrectOptions} correct option(s).`;
-                        if (ms_incorrectSelectionsMadeText.length > 0) {
-                            feedbackMsg += ` <span class="incorrect-selection-note">Incorrectly selected: ${ms_incorrectSelectionsMadeText.join(', ')}.</span>`;
-                        }
-                        feedbackMsg += `</p>`;
-                        detailedFeedbackHTML += feedbackMsg;
-                    } else { 
-                        detailedFeedbackHTML += `<p class="feedback-status incorrect-feedback">None of your selected options were correct.`;
-                        if (ms_incorrectSelectionsMadeText.length > 0) { 
-                            detailedFeedbackHTML += ` <span class="incorrect-selection-note">You selected: ${ms_incorrectSelectionsMadeText.join(', ')}.</span>`;
-                        }
-                        detailedFeedbackHTML += `</p>`;
-                    }
-                } else {
-                     detailedFeedbackHTML += `<p class="feedback-status unanswered-feedback">You did not answer this question.</p>`;
-                }
-
-                const correctOptionsDisplayTexts = allOptionObjects
-                    .filter(opt => correctOptionIds.includes(opt.id))
-                    .map(opt => escapeHTML(opt.text))
-                    .join(', ');
-                detailedFeedbackHTML += `<p><strong>All correct answer(s):</strong> <span class="correct-answer-text">${correctOptionsDisplayTexts}</span></p>`;
+                    if (ms_isPerfectScore) questionCard.classList.add('correct');
+                    else if (ms_correctlySelectedCount > 0) questionCard.classList.add('partially-correct');
+                    else questionCard.classList.add('incorrect');
+                } else questionCard.classList.add('unanswered');
+            } else { 
+                if (isQuestionCorrectOverall && answered) questionCard.classList.add('correct');
+                else if (answered) questionCard.classList.add('incorrect');
+                else questionCard.classList.add('unanswered');
             }
+            const explanationDiv = questionCard.querySelector('.explanation');
+            if (explanationDiv) explanationDiv.style.display = 'block';
+        }
 
-            if (questionCard) {
-                questionCard.classList.remove('correct', 'incorrect', 'unanswered', 'partially-correct');
-                if (q.type === 'multiple-select') {
-                    if (answered) {
-                        if (ms_isPerfectScore) {
-                            questionCard.classList.add('correct'); 
-                        } else if (ms_correctlySelectedCount > 0) {
-                            questionCard.classList.add('partially-correct'); 
-                        } else {
-                            questionCard.classList.add('incorrect'); 
-                        }
-                    } else {
-                        questionCard.classList.add('unanswered');
-                    }
-                } else { 
-                    if (isQuestionCorrectOverall && answered) {
-                        questionCard.classList.add('correct');
-                    } else if (answered) {
-                        questionCard.classList.add('incorrect');
-                    } else {
-                        questionCard.classList.add('unanswered');
-                    }
-                }
-                const explanationDiv = questionCard.querySelector('.explanation');
-                if (explanationDiv) {
-                    explanationDiv.style.display = 'block'; 
-                }
-            }
-            detailedFeedbackHTML += `<div class="explanation-feedback"><p><strong>Explanation:</strong> ${escapeHTML(q.explanation)}</p></div>`;
-            detailedFeedbackHTML += `</div>`; 
-            if (index < currentQuestions.length - 1) { 
-                detailedFeedbackHTML += `<hr class="feedback-divider">`;
-            }
-        });
-        console.log("handleSubmit: Loop finished. Score calculated:", score);
+        detailedFeedbackHTML += `<div class="explanation-feedback"><p><strong>Explanation:</strong> ${escapeHTML(q.explanation)}</p></div>`;
+        detailedFeedbackHTML += `</div>`; // End .feedback-question-block
+        if (index < currentQuestions.length - 1) {
+            detailedFeedbackHTML += `<hr class="feedback-divider">`;
+        }
+    }); // End of currentQuestions.forEach
 
-        if(scoreDisplay) scoreDisplay.textContent = `${score.toFixed(2)} out of ${currentQuestions.length}`;
-        if(feedbackArea) feedbackArea.innerHTML = detailedFeedbackHTML;
-        if(resultsContainer) {
-            resultsContainer.style.display = 'block';
-            console.log("handleSubmit: resultsContainer displayed.");
-        }
-        if(submitButton) {
-            submitButton.style.display = 'none';
-        }
-        if(examContainer) {
-            examContainer.style.display = 'none';
-            console.log("handleSubmit: examContainer hidden.");
-        }
-        console.log("handleSubmit: Function finished.");
+    console.log("handleSubmit: Loop finished. Score calculated:", score);
+
+    if(scoreDisplay) scoreDisplay.textContent = `${score.toFixed(2)} out of ${currentQuestions.length}`;
+    if(feedbackArea) feedbackArea.innerHTML = detailedFeedbackHTML;
+    if(resultsContainer) {
+        resultsContainer.style.display = 'block';
+        console.log("handleSubmit: resultsContainer displayed.");
     }
+    if(submitButton) {
+        submitButton.style.display = 'none';
+    }
+    if(examContainer) {
+        examContainer.style.display = 'none';
+        console.log("handleSubmit: examContainer hidden.");
+    }
+    console.log("handleSubmit: Function finished.");
+}
 
     // --- startExam function (simplified for single main mock) ---
     function startExam() { 

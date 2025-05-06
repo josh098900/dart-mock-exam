@@ -408,3 +408,124 @@ footer {
     border-color: #007bff;
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.35);
 }
+
+/* style.css - Add or update these styles */
+
+/* ... (your existing styles) ... */
+
+/* Enhanced Feedback Section Styling */
+.feedback-options-summary {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #f0f0f0;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #fafafa;
+}
+
+.feedback-option-item {
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    border-radius: 4px;
+    border: 1px solid transparent; /* Base border */
+    display: flex; /* For aligning icon and text */
+    justify-content: space-between; /* Pushes icon to the right */
+    align-items: center;
+}
+
+.feedback-option-item.user-selected-correct {
+    background-color: #e6ffed; /* Light green background */
+    border-color: #b2dfdb; /* Greenish border */
+    color: #2e7d32; /* Darker green text for contrast */
+}
+
+.feedback-option-item.user-selected-incorrect {
+    background-color: #ffebee; /* Light red background */
+    border-color: #ffcdd2; /* Reddish border */
+    color: #c62828; /* Darker red text */
+    text-decoration: line-through; /* Optional: strike through incorrect user picks */
+}
+
+.feedback-option-item.missed-correct-option {
+    background-color: #f0f9ff; /* Light blue or neutral to indicate it's a correct answer they missed */
+    border: 1px dashed #79aec8; /* Dashed border to differentiate */
+    color: #333; /* Default text color or slightly emphasized */
+}
+.feedback-option-item.missed-correct-option .feedback-icon.correct-icon {
+    color: #28a745; /* Ensure the icon is green */
+}
+
+
+.feedback-option-item.option-neutral {
+    background-color: #f8f9fa; /* Neutral background for other options */
+    color: #555;
+}
+
+.feedback-icon {
+    font-weight: bold;
+    margin-left: 10px; /* Space icon from text */
+    font-size: 1.1em;
+}
+
+.feedback-icon.correct-icon {
+    color: #28a745; /* Green tick */
+}
+
+.feedback-icon.incorrect-icon {
+    color: #dc3545; /* Red cross */
+}
+.feedback-icon.neutral-icon {
+    color: #ccc; /* Optional: for unselected incorrect options */
+}
+
+
+/* Adjusting existing feedback status messages for consistency */
+.feedback-status {
+    padding: 10px 15px;
+    margin-top: 10px; /* Increased top margin for status */
+    margin-bottom: 15px; /* Consistent bottom margin */
+    border-radius: 4px;
+    font-weight: bold;
+    border-width: 1px;
+    border-style: solid;
+}
+/* Ensure these colors are distinct and accessible */
+.feedback-status.correct-feedback { 
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+.feedback-status.partially-correct { 
+    color: #856404; 
+    background-color: #fff3cd; 
+    border-color: #ffeeba;
+}
+.feedback-status.incorrect-feedback {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+.feedback-status.unanswered-feedback { 
+    color: #555;
+    background-color: #f0f0f0;
+    border-color: #ddd;
+    font-style: italic;
+}
+
+.incorrect-selection-note {
+    color: #721c24; 
+    font-style: normal; /* Keep it clear */
+    font-weight: normal;
+}
+
+.explanation-feedback {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #f8f9fa; 
+    border-left: 4px solid #007396; 
+    font-size: 0.95em;
+    border-radius: 0 4px 4px 0;
+}
+.explanation-feedback p strong {
+    color: #333;
+}
